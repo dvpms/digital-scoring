@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+
+    <link rel='stylesheet prefetch' href='bootstrap/dist/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="login-assets/css/style.css">
+
+    <title>Aplikasi Wasit Juri - IPSI Kabupaten Tangerang</title>
+</head>
+
+<body>
+    <div class="app">
+        <div class="wrapper" style="overflow-x: scroll;">
+            <form class="form-signin" style="max-width: 100%;">       
+                <a class="btn btn-lg btn-primary btn-block" id="btn-selesai">Selesai</a>
+
+                <h4 style="text-align: center;">FORM NILAI</h4>
+                <h4 style="text-align: center;">KATEGORI : <label class="header-kategori"></label>, <label class="header-golongan"></label></h4>
+                <table>
+                    <tr>
+                        <th>Juri </th>
+                        <th> : <label class="header-juri"></label></th>
+                    </tr>
+                    <tr>
+                        <th>No Undian </th>
+                        <th> : <label class="header-undian"></label>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Nama </th>
+                        <th> : <label class="header-nama"></label></th>
+                    </tr>
+                    <tr>
+                        <th>Kontingen </th>
+                        <th> : <label class="header-kontingen"></label></th>
+                    </tr>
+                </table>                
+                <br />
+                <table style="width: 100%;" class="table table-bordered">
+                    <tr>
+                        <th colspan="7" style="text-align: center;background: #eee;">UNSUR NILAI</th>
+                    </tr>
+                    <tr style="background: #fdfd30;">
+                        <th style="text-align: center;">1</th>
+                        <th style="text-align: center;">2</th>
+                        <th style="text-align: center;">3</th>
+                        <th style="text-align: center;">4</th>
+                        <th style="text-align: center;">5</th>
+                        <th style="text-align: center;">6</th>
+                        <th style="text-align: center;">7</th>
+                    </tr> 
+                    <tr>
+                        <th colspan="7" style="text-align: center;background: #eee;">JURUS TANGAN KOSONG</th>
+                    </tr>  
+                    <tr>
+                        <th>7</th>
+                        <th>6</th>
+                        <th>5</th>
+                        <th>7</th>
+                        <th>6</th>
+                        <th>8</th>
+                        <th>11</th>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(1)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(1)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_1">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(2)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(2)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_2">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(3)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(3)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_3">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(4)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(4)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_4">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(5)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(5)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_5">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(6)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(6)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_6">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(7)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(7)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_7">
+                        </td>
+                    </tr>
+                    <tr style="background: #fdfd30;">
+                        <th style="text-align: center;">8</th>
+                        <th style="text-align: center;">9</th>
+                        <th style="text-align: center;">10</th>
+                        <th style="text-align: center;">11</th>
+                        <th style="text-align: center;">12</th>
+                        <th style="text-align: center;">13</th>
+                        <th style="text-align: center;">14</th>
+                    </tr> 
+                    <tr>
+                        <th colspan="3" style="text-align: center;background: #eee;">JURUS GOLOK / PARANG</th>
+                        <th colspan="4" style="text-align: center;background: #eee;">JURUS TONGKAT</th>
+                    </tr>
+                    <tr>
+                        <th>7</th>
+                        <th>6</th>
+                        <th>12</th>
+                        <th>6</th>
+                        <th>5</th>
+                        <th>5</th>
+                        <th>9</th>
+                    </tr> 
+                    <tr>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(8)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(8)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_8">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(9)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(9)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_9">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(10)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(10)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_10">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(11)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(11)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_11">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(12)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(12)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_12">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(13)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(13)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_13">
+                        </td>
+                        <td style="text-align: center;">
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_undo_minus_tunggal(14)"><img src="back.png" style="height: 15px;" /></span>
+                            <span class="btn btn-danger btn-sm" style="padding-left: 20px;padding-right: 20px;" onclick="add_minus_tunggal(14)">-1</span>
+                            <br />
+                            <input type="text" style="width: 30px; height: 32px;" readonly="true" value="0" class="nilai_14">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3">JUMLAH NILAI KEBENARAN</th>
+                        <th class="nilai_kebenaran">100</td>
+                        <th class="total_minus" style="text-align: center;"></th>
+                        <th class="kalkulasi_total_minus" style="text-align: center;"></th>
+                        <th class="kalkulasi_kemantapan" style="text-align: center;" rowspan="2"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="3">KEMANTAPAN / PENGHAYATAN / STAMINA</th>
+                        <td colspan="3">
+                            <label class="btn btn-danger" style="float: left;" onclick="minus_kemantapan_tunggal()"> - </label>
+                            <input type="text" style="float: left; width: 40px; height: 32px; margin-left: 5px; margin-right: 5px;" readonly="true" class="form-control value_kemantapan" value="50">
+                            <label class="btn btn-danger" style="float: left;" onclick="plus_kemantapan_tunggal()"> + </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="7">&nbsp;</th>
+                    </tr>
+                    <tr>
+                        <th colspan="7" style="background: #eee;">HUKUMAN</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2" colspan="2">1. Waktu</th>
+                        <th colspan="2">Remaja - Dewasa</th>
+                        <td>
+                            <label class="btn btn-danger" onclick="add_hukuman_waktu(-10)"> > 5 - 10 (-10) </label>
+                            <br><br>
+                            <label class="btn btn-danger" onclick="add_disk()"> > 10 (DISK) </label>
+                        </td>
+                        <th rowspan="2" colspan="2" class="hukuman_1" style="text-align: center;" ></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">Pra Remaja - Usia Dini</th>
+                        <td>
+                            <label class="btn btn-danger" onclick="add_hukuman_waktu(-10)"> > 10 - 15 (-10) </label>
+                            <br><br>
+                            <label class="btn btn-danger" onclick="add_disk()"> > 15 (DISK) </label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th colspan="2">2. Setiap kali keluar garis </th>
+                        <th colspan="3" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(2,5)"> SUBMIT HUKUMAN </label></th>
+                        <th class="hukuman_2" colspan="2" style="text-align: center;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">3. Pakaian / senjata tidak sempurna</th>
+                        <th colspan="3" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(3,5)"> SUBMIT HUKUMAN </label></th>
+                        <th class="hukuman_3" colspan="2" style="text-align: center;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">4. Setiap kali mengeluarkan suara</th>
+                        <th colspan="3" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(4,5)"> SUBMIT HUKUMAN </label></th>
+                        <th class="hukuman_4" colspan="2" style="text-align: center;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">5. Setiap kali senjata lepas</th>
+                        <th colspan="3" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(5,5)"> SUBMIT HUKUMAN </label></th>
+                        <th class="hukuman_5" colspan="2" style="text-align: center;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">CLEAR SEMUA HUKUMAN</th>
+                        <th colspan="3" style="text-align: center;">
+                            <label class="btn btn-danger" onclick="clear_hukuman()"> CLEAR SEMUA HUKUMAN </label>    
+                        </th>
+                        <th colspan="2" style="text-align: center;"></th>
+                    </tr>
+                    <tr>
+                        <th colspan="5" style="text-align: right">TOTAL NILAI</th>
+                        <th colspan="2" style="text-align: center;" class="total_nilai"></th>
+                    </tr>
+                </table>
+
+            </form>
+        </div>
+    </div>
+    <style type="text/css">
+        .btn-danger {
+            background: #4fd960;
+            border: 0;
+        }
+        .btn-danger, .btn-blue{
+            /*border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+            padding: 15px 29px;*/
+        }
+
+        .nm_merah, .kontingen_merah {
+            background: #FF0000;
+            color: white;
+        }
+
+        .nm_biru, .kontingen_biru, .btn-blue {
+            background: blue;
+            color: white;
+        }
+
+        .button-active, 
+        .button-active:focus, 
+        .button-active:active,
+        .button-active:hover,
+        .button-active:visited
+        {
+            background: green;
+            color: white;
+        }
+
+        .btn-blue:focus, 
+        .btn-blue:active,
+        .btn-blue:hover,
+        .btn-blue:visited
+        {
+            color: white;
+        }
+
+        .button_minus10 {
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            overflow:hidden;
+            height:1%;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.vibrate.min.js"></script>
+
+    <audio class="my_audio" controls preload="none" style="display:none;">
+        <source src="button.mp3" type="audio/mpeg">
+        <source src="button.ogg" type="audio/ogg">
+    </audio>
+    <script type="text/javascript">
+
+        $(".my_audio").trigger('load');
+        
+        function play_audio(task)
+        {
+            $(".my_audio").trigger('pause');
+            $(".my_audio").prop("currentTime",0);
+
+            $(".my_audio").trigger('play');
+        }
+
+        var url_api = 'http://localhost/skordigital/juritgr/api.php';
+        
+        var id_juri     = window.localStorage.getItem('juri');
+        var id_partai   = window.localStorage.getItem('partai'); 
+        var babak_active = 0;   
+
+        $(".header-juri").html(window.localStorage.getItem('nama_juri'));
+        $(".header-kategori").html(window.localStorage.getItem('kategori'));
+        $(".header-golongan").html(window.localStorage.getItem('golongan'));
+        $('.header-nama').html( window.localStorage.getItem('nama') );
+        $('.header-undian').html( window.localStorage.getItem('undian') );
+        $('.header-kontingen').html( window.localStorage.getItem('kontingen') );
+        $('.nama_juri').html( window.localStorage.getItem('nama_juri') );
+
+        var total_nilai_merah = 0;
+        var total_button_merah = 0;
+        var total_nilai_biru = 0;
+        var total_button_biru = 0;
+
+        var done_biru = 0;
+        var done_merah = 0;
+
+        $('.btn-danger').each(function(){
+            $(this).vibrate();  
+        }); 
+
+        $('.btn-blue').each(function(){
+            $(this).vibrate();  
+        })
+
+
+        function reload_again()
+        {
+            // insert first tunggal
+            $.ajax({
+                url: url_api+"?a=insert_first_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    $('.total_minus').html(obj.total_minus);
+
+                    if(obj.total_minus != ""){
+                        $('.kalkulasi_total_minus').html( (100 + parseInt(obj.total_minus)) );
+                    }
+                    else
+                    {
+                        
+                    }
+                    
+                    $('.value_kemantapan').val(obj.kemantapan);
+                    $('.hukuman_1').html(obj.hukuman_1);
+                    $('.hukuman_2').html(obj.hukuman_2);
+                    $('.hukuman_3').html(obj.hukuman_3);
+                    $('.hukuman_4').html(obj.hukuman_4);
+                    $('.hukuman_5').html(obj.hukuman_5);
+
+                    var total_kemantapan = (parseInt(obj.total_minus) + parseInt(obj.kemantapan)) ;
+
+                    if(total_kemantapan != "")
+                    {
+                        total_kemantapan = 100 + total_kemantapan;
+                    }
+
+
+                    var total_hukuman = parseInt(obj.hukuman_1) + parseInt(obj.hukuman_2) + parseInt(obj.hukuman_3) + parseInt(obj.hukuman_4) + parseInt(obj.hukuman_5) ;
+
+                    var total_nilai = total_kemantapan - ( - (parseInt(obj.hukuman_1) + parseInt(obj.hukuman_2) + parseInt(obj.hukuman_3) + parseInt(obj.hukuman_4) + parseInt(obj.hukuman_5))) ;
+
+                    $('.kalkulasi_kemantapan').html(total_kemantapan);
+                    $('.total_hukuman').html( total_hukuman );
+                    $('.total_nilai').html( total_nilai);
+
+                    $('.nilai_1').val(obj.jurus_1);
+                    $('.nilai_2').val(obj.jurus_2);
+                    $('.nilai_3').val(obj.jurus_3);
+                    $('.nilai_4').val(obj.jurus_4);
+                    $('.nilai_5').val(obj.jurus_5);
+                    $('.nilai_6').val(obj.jurus_6);
+                    $('.nilai_7').val(obj.jurus_7);
+                    $('.nilai_8').val(obj.jurus_8);
+                    $('.nilai_9').val(obj.jurus_9);
+                    $('.nilai_10').val(obj.jurus_10);
+                    $('.nilai_11').val(obj.jurus_11);
+                    $('.nilai_12').val(obj.jurus_12);
+                    $('.nilai_13').val(obj.jurus_13);
+                    $('.nilai_14').val(obj.jurus_14);
+
+                }
+            });
+        }
+
+        reload_again();
+
+
+        function add_disk()
+        {
+            $.ajax({
+                url: url_api+"?a=add_disk_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                    $('.nilai_kebenaran').html(0);
+                    $('.total_nilai').html(0);
+                    $('.kalkulasi_total_minus').html(0);
+
+                }
+            });   
+        }
+
+        function clear_hukuman()
+        {
+            $.ajax({
+                url: url_api+"?a=clear_hukuman_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                    $('.nilai_kebenaran').html(0);
+                    $('.total_nilai').html(0);
+                    $('.kalkulasi_total_minus').html(0);
+
+                }
+            });   
+        }
+
+        function plus_kemantapan_tunggal()
+        {
+            $.ajax({
+                url: url_api+"?a=plus_kemantapan_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+
+                    $('.value_kemantapan').val( obj.kemantapan);
+
+                    play_audio('play');   
+                    reload_again();
+                }
+            }); 
+        }
+
+        function minus_kemantapan_tunggal()
+        {
+            $.ajax({
+                url: url_api+"?a=minus_kemantapan_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+
+                    $('.value_kemantapan').val( obj.kemantapan);
+
+                    play_audio('play'); 
+                    reload_again();  
+                }
+            }); 
+        }
+
+        function add_minus_tunggal(jurus)
+        {    
+            $.ajax({
+                url: url_api+"?a=add_minus_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'jurus' : jurus},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    $('.nilai_'+jurus).val(obj.nilai);
+                    play_audio('play');   
+                    reload_again();
+                }
+            });   
+        }
+
+        function add_undo_minus_tunggal(jurus)
+        {    
+            $.ajax({
+                url: url_api+"?a=add_undo_minus_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'jurus' : jurus},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    $('.nilai_'+jurus).val(obj.nilai);
+                    play_audio('play');  
+                    reload_again(); 
+                }
+            });   
+        }
+
+        function add_hukuman_waktu(nilai)
+        {    
+            $.ajax({
+                url: url_api+"?a=add_hukuman_waktu_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'nilai' : nilai},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');  
+                    reload_again(); 
+                }
+            });   
+        }
+
+        function add_hukuman(hukuman, nilai)
+        {     
+            $.ajax({
+                url: url_api+"?a=add_hukuman_tunggal", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'hukuman': hukuman, 'nilai' : nilai},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+                }
+            });   
+        }
+
+        $("#btn-selesai").click(function(){
+
+            if(confirm("Logout system ?")){
+                window.location.replace('index.html');    
+            }
+
+        });
+    </script>
+</body>
+</html>

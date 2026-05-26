@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+
+    <link rel='stylesheet prefetch' href='bootstrap/dist/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="login-assets/css/style.css">
+
+    <title>Aplikasi Wasit Juri - IPSI Kabupaten Tangerang</title>
+</head>
+
+<body>
+    <div class="app">
+        <div class="wrapper" style="overflow-x: scroll;">
+            <form class="form-signin" style="max-width: 100%;">       
+                <a class="btn btn-lg btn-primary btn-block" id="btn-selesai">Selesai</a>
+
+                <h4 style="text-align: center;">FORM NILAI</h4>
+                <h4 style="text-align: center;">KATEGORI : <label class="header-kategori"></label>, <label class="header-golongan"></label></h4>
+                <table>
+                    <tr>
+                        <th>Juri </th>
+                        <th> : <label class="header-juri"></label></th>
+                    </tr>
+                    <tr>
+                        <th>No Undian &nbsp;&nbsp;</th>
+                        <th> : <label class="header-undian"></label>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Nama </th>
+                        <th> : <label class="header-nama"></label></th>
+                    </tr>
+                    <tr>
+                        <th>Kontingen </th>
+                        <th> : <label class="header-kontingen"></label></th>
+                    </tr>
+                </table>
+                
+                <br />
+                <table style="width: 100%;" class="table table-bordered">
+                    <tr>
+                        <th colspan="3" style="text-align: center;background: #fdfd30;">UNSUR PENILAIAN</th>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">TEKNIK SERANG BELA (60 - 80)</th>
+                        <th style="text-align: center;">NILAI</th>
+                        <th style="text-align: center;">JUMLAH NILAI</th>
+                    </tr>
+                    <tr>
+                        <td>1. Kualitas teknik serang bela tangan kosong dan bersenjata</td>
+                        <td style="text-align: center;" rowspan="4">
+                            <p style="text-align: center;">
+                                <label class="btn btn-danger" style="float: left;" onclick="minus_nilai_serang_ganda()"> - </label> 
+                                <input type="text" style="float: left; width: 40px; height: 32px; margin-left: 5px; margin-right: 5px;" readonly="true" class="form-control teknik" value="60">
+                                <label class="btn btn-danger" style="float: left;" onclick="plus_nilai_serang_ganda()"> + </label>
+                            </p>
+                        </td>
+                        <th rowspan="12" style="vertical-align: middle;"><p class="sub_total" style="text-align: center;"></p></th>
+                    </tr>
+                    <tr>
+                        <td>2. Kekayaan bentuk teknik serang bela</td>
+                    </tr>
+                    <tr>
+                        <td>3. Keterampilan dan kreativitas teknik</td>
+                    </tr>
+                    <tr>
+                        <td>4. Logika pelaksanaan teknik serang bela</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">KEMANTAPAN & KEKOMPAKAN (50-60)</th>
+                        <th style="text-align: center;">NILAI</th>
+                    </tr>
+                    <tr>
+                        <td>1. Kemantapan dan ketegasan gerak</td>
+                        <td style="text-align: center;" rowspan="4">
+                            <p>
+                                <label class="btn btn-danger" style="float: left;" onclick="minus_nilai_mantap_ganda()"> - </label>
+                                <input type="text" style="float: left; width: 40px; height: 32px; margin-left: 5px; margin-right: 5px;" readonly="true" class="form-control mantap" value="60">
+                                <label class="btn btn-danger" style="float: left;" onclick="plus_nilai_mantap_ganda()"> + </label>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2. Kekompakan / solidaritas peragaan</td>
+                    </tr>
+                    <tr>
+                        <td>3. Keberanian memainkan senjata</td>
+                    </tr>
+
+                    <tr>
+                        <td>4. Tenaga dan stamina</td>
+                    </tr>
+                    <tr>
+                        <th style="text-align: center;">KESERASIAN PENGHAYATAN (50 - 60)</th>
+                        <th style="text-align: center;">NILAI</th>
+                    </tr>
+                    <tr>
+                        <td>1. Keserasian ekspresi dan gerakan</td>
+                        <td style="text-align: center;" rowspan="2">
+                            <label class="btn btn-danger" style="float: left;" onclick="minus_nilai_serasi_ganda()"> - </label>
+                            <input type="text" style="float: left; width: 40px; height: 32px; margin-left: 5px; margin-right: 5px;" readonly="true" class="form-control serasi" value="60">
+                            <label class="btn btn-danger" style="float: left;" onclick="plus_nilai_serasi_ganda()"> + </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2. Keserasian irama gerakan</td>
+                    </tr>                        
+                </table>
+
+                <table style="width: 100%;" class="table table-bordered">
+                     <tr>
+                        <th style="text-align: center;background: #eee;" colspan="3">HUKUMAN</th>
+                        <th style="text-align: center;background: #eee;">JUMLAH HUKUMAN</th>
+                    </tr>
+                    <tr>
+                        <th rowspan="2">1. Waktu</th>
+                        <th>Remaja - Dewasa</th>
+                        <td>
+                            <label class="btn btn-danger" onclick="add_hukuman_waktu(-10)"> > 5 - 10 (-10) </label>
+                            <label class="btn btn-danger" onclick="add_disk()"> > 10 (DISK) </label>
+                        </td>
+                        <td rowspan="2" class="hukuman_1"></td>
+                    </tr>
+                    <tr>
+                        <th>Pra Remaja - Usia Dini</th>
+                        <td>
+                            <label class="btn btn-danger" onclick="add_hukuman_waktu(-10)"> > 10 - 15 (-10) </label>
+                            <label class="btn btn-danger" onclick="add_disk()"> > 15 (DISK) </label>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>2. Setiap kali keluar garis </th>
+                        <td colspan="2" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(2,-5)"> SUBMIT HUKUMAN </label></td>
+                        <th class="hukuman_2"></th>
+                    </tr>
+                    <tr>
+                        <th>3. Setiap kali senjata JATUH TIDAK SESUAI DESKRIPSI </th>
+                        <td colspan="2" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(3,-5)"> SUBMIT HUKUMAN </label></td> 
+                        <th class="hukuman_3"></th>
+                    </tr>
+                    <tr>
+                        <th>4. Senjata TIDAK JATUH SESUAI DESKRIPSI </th>
+                        <td colspan="2" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(4,-5)"> SUBMIT HUKUMAN </label></td>
+                        <th class="hukuman_4"></th>
+                    </tr>
+                    <tr>
+                        <th>5. Setiap kali mengeluarkan suara </th>
+                        <td colspan="2" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(5,-5)"> SUBMIT HUKUMAN </label></td>
+                        <th class="hukuman_5"></th>
+                    </tr>
+                    <tr>
+                        <th>6. Senjata tidak sesuai (patah) </th>
+                        <td colspan="2" style="text-align: center;"><label class="btn btn-danger" onclick="add_hukuman(6,-5)"> SUBMIT HUKUMAN </label></td>
+                        <th class="hukuman_6"></th>
+                    </tr>
+                    <tr>
+                        <th>CLEAR SEMUA HUKUMAN </th>
+                        <td colspan="2" style="text-align: center;">
+                            <label class="btn btn-danger" onclick="clear_hukuman()"> CLEAR SEMUA HUKUMAN </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="3" style="text-align: right;">TOTAL NILAI</th>
+                        <th class="total_nilai"></th>
+                    </tr>
+                </table>
+
+            </form>
+        </div>
+    </div>
+    <style type="text/css">
+        .btn-danger {
+            background: #4fd960;
+            border: 0;
+        }
+        
+
+        .nm_merah, .kontingen_merah {
+            background: #FF0000;
+            color: white;
+        }
+
+        .nm_biru, .kontingen_biru, .btn-blue {
+            background: blue;
+            color: white;
+        }
+
+        .button-active, 
+        .button-active:focus, 
+        .button-active:active,
+        .button-active:hover,
+        .button-active:visited
+        {
+            background: green;
+            color: white;
+        }
+
+        .btn-blue:focus, 
+        .btn-blue:active,
+        .btn-blue:hover,
+        .btn-blue:visited
+        {
+            color: white;
+        }
+
+        .button_minus10 {
+            display: flex;
+            flex-direction: column;
+            border-radius: 10px;
+            overflow:hidden;
+            height:1%;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.vibrate.min.js"></script>
+    <audio class="my_audio" controls preload="none" style="display:none;">
+        <source src="button.mp3" type="audio/mpeg">
+        <source src="button.ogg" type="audio/ogg">
+    </audio>
+    <script type="text/javascript"> 
+        $(".my_audio").trigger('load');
+        
+        function play_audio(task)
+        {
+            $(".my_audio").trigger('pause');
+            $(".my_audio").prop("currentTime",0);
+
+            $(".my_audio").trigger('play');
+        }
+
+        var url_api = 'http://localhost/skordigital/juritgr/api.php';
+
+        var id_juri     = window.localStorage.getItem('juri');
+        var id_partai   = window.localStorage.getItem('partai');
+
+        $(".header-juri").html(window.localStorage.getItem('nama_juri'));
+        $(".header-kategori").html(window.localStorage.getItem('kategori'));
+        $(".header-golongan").html(window.localStorage.getItem('golongan'));
+        $('.header-nama').html( window.localStorage.getItem('nama') );
+        $('.header-undian').html( window.localStorage.getItem('undian') );
+        $('.nama_juri').html( window.localStorage.getItem('nama_juri') );
+        $('.header-kontingen').html( window.localStorage.getItem('kontingen') );
+
+        var total_nilai_merah = 0;
+        var total_button_merah = 0;
+        var total_nilai_biru = 0;
+        var total_button_biru = 0;
+
+        var done_biru = 0;
+        var done_merah = 0;
+
+		$('.btn-danger').each(function(){
+			$(this).vibrate();	
+		}); 
+
+		$('.btn-blue').each(function(){
+			$(this).vibrate();	
+		});
+
+        function reload_again()
+        {
+            // insert first tunggal
+            $.ajax({
+                url: url_api+"?a=insert_first_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    $('.sub_total').html(obj.sub_total);
+                    $('.hukuman_1').html(obj.hukuman_1);
+                    $('.hukuman_2').html(obj.hukuman_2);
+                    $('.hukuman_3').html(obj.hukuman_3);
+                    $('.hukuman_4').html(obj.hukuman_4);
+                    $('.hukuman_5').html(obj.hukuman_5);
+                    $('.hukuman_6').html(obj.hukuman_6);
+
+                    var total_hukuman = parseInt(obj.hukuman_1) + parseInt(obj.hukuman_2) + parseInt(obj.hukuman_3) + parseInt(obj.hukuman_4) + parseInt(obj.hukuman_5) + parseInt(obj.hukuman_6);
+
+                    $('.total_hukuman').html(total_hukuman);
+                    $('.total_nilai').html(parseInt(obj.sub_total) - (- total_hukuman ));
+
+                    $('.teknik').val(obj.teknik);
+                    $('.mantap').val(obj.mantap);
+                    $('.serasi').val(obj.serasi);
+                }
+            }); 
+        }
+
+        reload_again();
+
+        function minus_nilai_serang_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=minus_nilai_serang_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+                }
+            }); 
+        }
+
+        function plus_nilai_serang_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=plus_nilai_serang_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            }); 
+        }
+
+        function minus_nilai_mantap_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=minus_nilai_mantap_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');  
+                    reload_again() 
+                }
+            }); 
+        }
+
+        function plus_nilai_mantap_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=plus_nilai_mantap_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again()
+                }
+            }); 
+        }
+
+        function minus_nilai_serasi_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=minus_nilai_serasi_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');  
+                    reload_again();
+
+                }
+            }); 
+        }
+
+        function plus_nilai_serasi_ganda()
+        {
+            $.ajax({
+                url: url_api+"?a=plus_nilai_serasi_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            }); 
+        }
+
+        function add_disk() 
+        {
+            $.ajax({
+                url: url_api+"?a=add_disk_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            });   
+        }
+
+        function clear_hukuman()
+        {
+            $.ajax({
+                url: url_api+"?a=clear_hukuman_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            });   
+        }
+
+        function add_hukuman_waktu(nilai)
+        {    
+            $.ajax({
+                url: url_api+"?a=add_hukuman_waktu_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'nilai' : nilai},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            });   
+        }
+
+        function add_hukuman(hukuman, nilai)
+        {    
+            $.ajax({
+                url: url_api+"?a=add_hukuman_ganda", 
+                data : {'id_jadwal': id_partai, 'id_juri': id_juri, 'hukuman': hukuman, 'nilai' : nilai},
+                type: "POST",
+                dataType: "json",
+                crossDomain: true,
+                success: function(obj){
+                    play_audio('play');   
+                    reload_again();
+
+                }
+            });   
+        }
+
+
+        $("#btn-selesai").click(function(){
+
+            if(confirm("Logout system ?")){
+                window.location.replace('index.html');    
+            }
+
+        });
+    </script>
+</body>
+</html>

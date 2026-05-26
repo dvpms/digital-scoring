@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="robots" content="noindex">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" />
+
+    <link rel='stylesheet prefetch' href='bootstrap/dist/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="login-assets/css/style.css">
+
+    <title>Aplikasi Wasit Juri - IPSI Kabupaten Tangerang</title>
+</head>
+
+<body>
+    <div class="app">
+        <div class="wrapper">
+            <form class="form-signin" style="position: relative;" onsubmit="return false;">
+              <h2 class="form-signin-heading">Login System</h2>
+
+              <select class="form-control" id="kategori" name="kategori">
+                    <option value=""> -- Kategori -- </option>
+                    <option>Tunggal</option>
+                    <option>Ganda</option>
+                    <option>Regu</option>
+                </select>
+                <select class="form-control" id="golongan" name="golongan">
+                    <option value=""> -- Golongan -- </option>
+                </select>
+               <select class="form-control" id="partai" name="partai">
+                    <option value=""> -- Partai -- </option>
+                </select>
+                <select class="form-control" id="juri" name="juri">
+                    <option value=""> -- Wasit Juri -- </option>
+                </select>
+              <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="password" required=""/>      
+              <a class="btn btn-lg btn-primary btn-block" id="btn-login">Login</a>   
+              <h4 style="text-align: center;">
+                  APLIKASI WASIT JURI<br />     
+                  IPSI KABUPATEN TANGERANG <br />         
+                  2018      
+              </h4>
+            </form>
+        </div>
+    </div>
+    <!-- <script type="text/javascript" src="cordova.js"></script>-->
+     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+
+        var ip_server = window.localStorage.getItem('ip_server');
+       	var user_db = window.localStorage.getItem('user_db');
+       	var password_db = window.localStorage.getItem('password_db');
+       	var db = window.localStorage.getItem('db');
+        
+        var url_api = 'http://localhost/skordigital/juritgr/api.php';
+
+        $("#kategori").on('change', function(){
+
+            var el = $(this);
+
+            // get partai
+                $.ajax({
+                    url: url_api, 
+                    data : {a : 'get_golongan_tgr', 'kategori' : el.val() },
+                    type: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function(obj){
+
+                      var html = "<option value=\"\"> -- Golongan -- </option>";
+                      
+                      $.each(obj, function(key, value){
+
+                        html += "<option>"+ value.name +"</option>";
+                      })
+
+                      $("#golongan").html(html);
+                    }
+                });
+
+        });
+
+
+        $("#golongan").on('change', function(){
+
+            var gol_el = $(this);
+            var kat_el = $("#kategori");
+
+            // get partai
+                $.ajax({
+                    url: url_api, 
+                    data : {a : 'partai', 'kategori' : kat_el.val(), 'golongan' : gol_el.val() },
+                    type: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function(obj){
+
+                      var html = "<option value=\"\"> -- Partai -- </option>";
+                      
+                      $.each(obj, function(key, value){
+
+                        html += "<option data-nama=\""+ value.nama_pemain +"\" data-undian=\""+ value.undian +"\" value=\""+ value.id +"\">"+ value.name +"</option>";
+                      })
+
+                      $("#partai").html(html);
+                    }
+                });
+        });
+
+        
+        $(function(){
+
+        	setTimeout(function(){
+
+	            // // get partai
+	            // $.ajax({
+	            //     url: url_api, 
+	            //     data : {a : 'partai'},
+	            //     type: "GET",
+	            //     dataType: "json",
+	            //     crossDomain: true,
+	            //     success: function(obj){
+
+	            //       var html = "<option value=\"\"> -- Partai -- </option>";
+	                  
+	            //       $.each(obj, function(key, value){
+
+	            //         html += "<option value=\""+ value.id +"\">"+ value.name +" "+ value.gelanggang +"</option>";
+	            //       })
+
+	            //       $("#partai").html(html);
+	            //     }
+	            // });
+
+	            // get juri
+	            $.ajax({
+	                url: url_api, 
+	                data : {a : 'juri'},
+	                type: "GET",
+	                dataType: "json",
+	                crossDomain: true,
+	                success: function(obj){
+
+	                  var html = "<option value=\"\"> -- Wasit Juri -- </option>";
+	                  
+	                  $.each(obj, function(key, value){
+	                    html += "<option value=\""+ value.id +"\">"+ value.name +"</option>";
+
+	                  })
+
+	                  $("#juri").html(html);
+	                }
+	            });
+
+	            console.log(url_api);
+	        }, 1000);
+
+
+            $('#btn-login').on('click', function(){
+
+		        var ip_server = window.localStorage.getItem('ip_server');
+		       	var user_db = window.localStorage.getItem('user_db');
+		       	var password_db = window.localStorage.getItem('password_db');
+		       	var db = window.localStorage.getItem('db');
+		        
+		       	if(ip_server == "" || user_db == "" || password_db == "" || db =="")
+		       	{
+		       		alert("Anda Harus melakukan konfigurasi server terlebih dahulu");
+
+		       		return false;
+		       	}
+
+
+                var id_wasit = $("#juri").val();
+                var nama_wasit = $("select#juri :selected").text();
+
+                var pass = $('#password').val();
+                var id_partai = $("#partai").val();
+                var kategori = $("#kategori").val();
+                var golongan = $("#golongan").val();
+                var nama = $("#partai option:selected").data('nama');
+                var undian = $("#partai option:selected").data('undian');
+
+                if(id_partai == "")
+                {
+                    alert('Partai Harus dipilih');
+                    return false;
+                } 
+
+                if(id_wasit == "")
+                {
+                    alert('Wasit Harus dipilih');
+                    return false;
+                }
+
+                if(pass == "")
+                {
+                    alert('Password Harus dipilih');
+                    return false;
+                }
+
+
+                // get juri
+                $.ajax({
+                    url: url_api, 
+                    data : {a : 'login', id: id_wasit, password: pass, 
+                                'id_partai' : id_partai
+                            },
+                    type: "GET",
+                    dataType: "json",
+                    crossDomain: true,
+                    success: function(obj)
+                    {
+                        if(obj.status == 'error')
+                        {
+                            alert('Password anda salah');
+                        }
+                        else
+                        {
+                            window.localStorage.setItem("is_login", 1);
+                            window.localStorage.setItem("juri", id_wasit);
+                            window.localStorage.setItem("nama_juri", nama_wasit);
+                            window.localStorage.setItem("partai", id_partai);
+                            window.localStorage.setItem("kategori", kategori);
+                            window.localStorage.setItem("golongan", golongan);
+                            window.localStorage.setItem("nama", nama);
+                            window.localStorage.setItem("undian", undian);
+                            window.localStorage.setItem("kontingen", obj.kontingen);
+                            
+                            if(kategori == 'Tunggal')
+                            {
+                                window.location.replace('tunggal.html');    
+                            }
+
+                            if(kategori == 'Ganda')
+                            {
+                                window.location.replace('ganda.html');    
+                            }
+
+                            if(kategori == 'Regu')
+                            {
+                                window.location.replace('regu.html');    
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
