@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #f4f7fb;
+  --panel: #ffffff;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --primary: #0f4fa8;
+  --border: #d1d5db;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.topbar {
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.navwrap {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand {
+  margin: 0;
+  font-size: 20px;
+}
+
+nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.navlink {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.main {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.stat {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+input,
+select,
+textarea,
+button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+th,
+td {
+  padding: 8px;
+  border: 1px solid var(--border);
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  background: #eef2ff;
+}
+
+.note {
+  color: var(--muted);
+  font-size: 13px;
+}
