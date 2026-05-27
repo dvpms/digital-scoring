@@ -7,7 +7,13 @@ mysql_connect("localhost","root","") or
 mysql_select_db("bankdatasho") or
  die('No database selected!'); */
 
-$koneksi = mysqli_connect("localhost","root","","skordigital");
+$koneksi = mysqli_connect(
+    getenv('MYSQLHOST'),
+    getenv('MYSQLUSER'),
+    getenv('MYSQLPASSWORD'),
+    getenv('MYSQLDATABASE'),
+    getenv('MYSQLPORT')
+);
 // Check connection
 if (mysqli_connect_errno()){
 	echo "Koneksi ke database gagal : " . mysqli_connect_error();
