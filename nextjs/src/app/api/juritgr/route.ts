@@ -5,6 +5,19 @@ import { getPool, query } from "@/lib/db";
 
 type Payload = Record<string, string>;
 
+type JuriRow = {
+  id_juri: number;
+  nm_juri: string;
+};
+
+type JadwalTgrRow = {
+  id_partai: number;
+  noundian: string;
+  golongan: string;
+  nama: string;
+  kontingen: string;
+};
+
 type NilaiReguRow = {
   jurus1: number;
   jurus2: number;
@@ -91,6 +104,396 @@ const TUNGGAL_JURUS_COLUMNS = [
   "jurus13",
   "jurus14",
 ] as const;
+
+function htmlResponse(html: string) {
+  return new Response(html, {
+    status: 200,
+    headers: { "content-type": "text/html; charset=utf-8" },
+  });
+}
+
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function sum(values: number[]) {
+  return values.reduce((acc, item) => acc + item, 0);
+}
+
+function totalAfterTrim(total: number, scores: number[]) {
+  if (!scores.length) return 0;
+  return total - Math.min(...scores) - Math.max(...scores);
+}
+
+async function getMonitorBase(kategori: "Tunggal" | "Regu" | "Ganda") {
+  const [jadwalRows, juriRows] = await Promise.all([
+    query<JadwalTgrRow>(
+      `SELECT id_partai, noundian, golongan, nama, kontingen
+       FROM jadwal_tgr
+       WHERE kategori = ?
+       ORDER BY id_partai, golongan ASC`,
+      [kategori],
+    ),
+    query<JuriRow>("SELECT id_juri, nm_juri FROM wasit_juri"),
+  ]);
+
+  return { jadwalRows, juriRows };
+}
+
+async function getDataViewGanda() {
+  const { jadwalRows, juriRows } = await getMonitorBase("Ganda");
+
+  const body = await Promise.all(
+    jadwalRows.map(async (jadwal) => {
+      const nilaiRows = await query<
+        NilaiGandaRow & {
+          id_juri: number;
+        }
+      >(
+        `SELECT id_juri, teknik_serang, mantap_kompak, serasi, hukum_1, hukum_2, hukum_3, hukum_4, hukum_5, hukum_6
+         FROM nilai_ganda
+         WHERE id_jadwal = ?`,
+        [jadwal.id_partai],
+      );
+      const nilaiByJuri = new Map(nilaiRows.map((row) => [row.id_juri, row]));
+
+      let totalNilai = 0;
+      const tempNilai: number[] = [];
+
+      const serangLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          return `${escapeHtml(juri.nm_juri)} : ${row?.teknik_serang ?? 0}<br />`;
+        })
+        .join("");
+      const kompakLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          return `${escapeHtml(juri.nm_juri)} : ${row?.mantap_kompak ?? 0}<br />`;
+        })
+        .join("");
+      const serasiLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          return `${escapeHtml(juri.nm_juri)} : ${row?.serasi ?? 0}<br />`;
+        })
+        .join("");
+      const hukumLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const hukum = row
+            ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4, row.hukum_5, row.hukum_6])
+            : 0;
+          return `${escapeHtml(juri.nm_juri)} : ${hukum}<br />`;
+        })
+        .join("");
+      const nilaiLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const hukum = row
+            ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4, row.hukum_5, row.hukum_6])
+            : 0;
+          const nilai = row
+            ? row.teknik_serang + row.mantap_kompak + row.serasi - -hukum
+            : 0;
+          tempNilai.push(nilai);
+          totalNilai += nilai;
+          return `${escapeHtml(juri.nm_juri)} : ${nilai}<br />`;
+        })
+        .join("");
+
+      const minNilai = tempNilai.length ? Math.min(...tempNilai) : 0;
+      const maxNilai = tempNilai.length ? Math.max(...tempNilai) : 0;
+
+      return `<tr class="text-center">
+        <td>${escapeHtml(jadwal.noundian)}</td>
+        <td>${escapeHtml(jadwal.golongan)}</td>
+        <td>${escapeHtml(jadwal.nama)}</td>
+        <td>${escapeHtml(jadwal.kontingen)}</td>
+        <td>${serangLines}</td>
+        <td>${kompakLines}</td>
+        <td>${serasiLines}</td>
+        <td>${hukumLines}</td>
+        <td>${nilaiLines}</td>
+        <td>${totalAfterTrim(totalNilai, tempNilai)}<br>MIN : ${minNilai}<br>MAX : ${maxNilai}</td>
+      </tr>`;
+    }),
+  );
+
+  return `<table class="table table-bordered">
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td rowspan="2">UNDIAN</td>
+      <td rowspan="2">GOLONGAN</td>
+      <td rowspan="2">NAMA PESILAT</td>
+      <td rowspan="2">KONTINGEN</td>
+      <td colspan="3">UNSUR NILAI</td>
+      <td rowspan="2">HUKUMAN</td>
+      <td rowspan="2">NILAI /JURI</td>
+      <td rowspan="2"> TOTAL NILAI</td>
+    </tr>
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td>SERANG/BELA</td>
+      <td>KEMANTAPAN</td>
+      <td>SERASI</td>
+    </tr>
+    ${body.join("")}
+  </table>`;
+}
+
+async function getDataViewRegu() {
+  const { jadwalRows, juriRows } = await getMonitorBase("Regu");
+
+  const body = await Promise.all(
+    jadwalRows.map(async (jadwal) => {
+      const nilaiRows = await query<
+        NilaiReguRow & {
+          id_juri: number;
+        }
+      >(
+        `SELECT id_juri, jurus1, jurus2, jurus3, jurus4, jurus5, jurus6, jurus7, jurus8, jurus9, jurus10, jurus11, jurus12,
+                kemantapan, hukum_1, hukum_2, hukum_3, hukum_4
+         FROM nilai_regu
+         WHERE id_jadwal = ?`,
+        [jadwal.id_partai],
+      );
+      const nilaiByJuri = new Map(nilaiRows.map((row) => [row.id_juri, row]));
+
+      let totalNilai = 0;
+      const tempNilai: number[] = [];
+
+      const kebenaranLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const totalJurus = row
+            ? sum([
+                row.jurus1,
+                row.jurus2,
+                row.jurus3,
+                row.jurus4,
+                row.jurus5,
+                row.jurus6,
+                row.jurus7,
+                row.jurus8,
+                row.jurus9,
+                row.jurus10,
+                row.jurus11,
+                row.jurus12,
+              ])
+            : 0;
+          const kebenaran = totalJurus !== 0 ? 100 - -totalJurus : 0;
+          return `${escapeHtml(juri.nm_juri)} : ${kebenaran}<br />`;
+        })
+        .join("");
+      const kemantapanLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          return `${escapeHtml(juri.nm_juri)} : ${row?.kemantapan ?? 0}<br />`;
+        })
+        .join("");
+      const hukumLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const hukum = row ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4]) : 0;
+          return `${escapeHtml(juri.nm_juri)} : ${hukum}<br />`;
+        })
+        .join("");
+      const nilaiLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const totalJurus = row
+            ? sum([
+                row.jurus1,
+                row.jurus2,
+                row.jurus3,
+                row.jurus4,
+                row.jurus5,
+                row.jurus6,
+                row.jurus7,
+                row.jurus8,
+                row.jurus9,
+                row.jurus10,
+                row.jurus11,
+                row.jurus12,
+              ])
+            : 0;
+          const kebenaran = totalJurus !== 0 ? 100 - -totalJurus : 0;
+          const hukum = row ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4]) : 0;
+          const nilai = row ? kebenaran + (row.kemantapan ?? 0) - -hukum : 0;
+          tempNilai.push(nilai);
+          totalNilai += nilai;
+          return `${escapeHtml(juri.nm_juri)} : ${nilai}<br />`;
+        })
+        .join("");
+
+      const minNilai = tempNilai.length ? Math.min(...tempNilai) : 0;
+      const maxNilai = tempNilai.length ? Math.max(...tempNilai) : 0;
+
+      return `<tr class="text-center">
+        <td>${escapeHtml(jadwal.noundian)}</td>
+        <td>${escapeHtml(jadwal.golongan)}</td>
+        <td>${escapeHtml(jadwal.nama)}</td>
+        <td>${escapeHtml(jadwal.kontingen)}</td>
+        <td>${kebenaranLines}</td>
+        <td>${kemantapanLines}</td>
+        <td>${hukumLines}</td>
+        <td>${nilaiLines}</td>
+        <td>${totalAfterTrim(totalNilai, tempNilai)}<br>MIN : ${minNilai}<br>MAX : ${maxNilai}</td>
+      </tr>`;
+    }),
+  );
+
+  return `<table class="table table-bordered">
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td rowspan="2">NO UNDIAN</td>
+      <td rowspan="2">GOLONGAN</td>
+      <td rowspan="2">NAMA PESILAT</td>
+      <td rowspan="2">KONTINGEN</td>
+      <td colspan="2">UNSUR NILAI</td>
+      <td rowspan="2">HUKUMAN</td>
+      <td rowspan="2">NILAI /JURI</td>
+      <td rowspan="2">TOTAL NILAI</td>
+    </tr>
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td>KEBENARAN</td>
+      <td>KEMANTAPAN</td>
+    </tr>
+    ${body.join("")}
+  </table>`;
+}
+
+async function getDataViewTunggal() {
+  const { jadwalRows, juriRows } = await getMonitorBase("Tunggal");
+
+  const body = await Promise.all(
+    jadwalRows.map(async (jadwal) => {
+      const nilaiRows = await query<
+        NilaiTunggalRow & {
+          id_juri: number;
+        }
+      >(
+        `SELECT id_juri, jurus1, jurus2, jurus3, jurus4, jurus5, jurus6, jurus7, jurus8, jurus9, jurus10, jurus11, jurus12, jurus13, jurus14,
+                kemantapan, hukum_1, hukum_2, hukum_3, hukum_4, hukum_5
+         FROM nilai_tunggal
+         WHERE id_jadwal = ?`,
+        [jadwal.id_partai],
+      );
+      const nilaiByJuri = new Map(nilaiRows.map((row) => [row.id_juri, row]));
+
+      let totalNilai = 0;
+      const tempNilai: number[] = [];
+
+      const kebenaranLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const totalJurus = row
+            ? sum([
+                row.jurus1,
+                row.jurus2,
+                row.jurus3,
+                row.jurus4,
+                row.jurus5,
+                row.jurus6,
+                row.jurus7,
+                row.jurus8,
+                row.jurus9,
+                row.jurus10,
+                row.jurus11,
+                row.jurus12,
+                row.jurus13,
+                row.jurus14,
+              ])
+            : 0;
+          const kebenaran = totalJurus !== 0 ? 100 - -totalJurus : 0;
+          return `${escapeHtml(juri.nm_juri)} : ${kebenaran}<br />`;
+        })
+        .join("");
+      const kemantapanLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          return `${escapeHtml(juri.nm_juri)} : ${row?.kemantapan ?? 0}<br />`;
+        })
+        .join("");
+      const hukumLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const hukum = row
+            ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4, row.hukum_5])
+            : 0;
+          return `${escapeHtml(juri.nm_juri)} : ${hukum}<br />`;
+        })
+        .join("");
+      const nilaiLines = juriRows
+        .map((juri) => {
+          const row = nilaiByJuri.get(juri.id_juri);
+          const totalJurus = row
+            ? sum([
+                row.jurus1,
+                row.jurus2,
+                row.jurus3,
+                row.jurus4,
+                row.jurus5,
+                row.jurus6,
+                row.jurus7,
+                row.jurus8,
+                row.jurus9,
+                row.jurus10,
+                row.jurus11,
+                row.jurus12,
+                row.jurus13,
+                row.jurus14,
+              ])
+            : 0;
+          const kebenaran = totalJurus !== 0 ? 100 - -totalJurus : 0;
+          const hukum = row
+            ? sum([row.hukum_1, row.hukum_2, row.hukum_3, row.hukum_4, row.hukum_5])
+            : 0;
+          const nilai = row ? kebenaran + (row.kemantapan ?? 0) - -hukum : 0;
+          tempNilai.push(nilai);
+          totalNilai += nilai;
+          return `${escapeHtml(juri.nm_juri)} : ${nilai}<br />`;
+        })
+        .join("");
+
+      const minNilai = tempNilai.length ? Math.min(...tempNilai) : 0;
+      const maxNilai = tempNilai.length ? Math.max(...tempNilai) : 0;
+
+      return `<tr class="text-center">
+        <td>${escapeHtml(jadwal.noundian)}</td>
+        <td>${escapeHtml(jadwal.golongan)}</td>
+        <td>${escapeHtml(jadwal.nama)}</td>
+        <td>${escapeHtml(jadwal.kontingen)}</td>
+        <td>${kebenaranLines}</td>
+        <td>${kemantapanLines}</td>
+        <td>${hukumLines}</td>
+        <td>${nilaiLines}</td>
+        <td>${totalAfterTrim(totalNilai, tempNilai)}<br>MIN : ${minNilai}<br>MAX : ${maxNilai}</td>
+      </tr>`;
+    }),
+  );
+
+  return `<table class="table table-bordered">
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td rowspan="2">NO UNDIAN</td>
+      <td rowspan="2">GOLONGAN</td>
+      <td rowspan="2">NAMA PESILAT</td>
+      <td rowspan="2">KONTINGEN</td>
+      <td colspan="2">UNSUR NILAI</td>
+      <td rowspan="2">HUKUMAN</td>
+      <td rowspan="2">NILAI /JURI</td>
+      <td rowspan="2"> TOTAL NILAI</td>
+    </tr>
+    <tr class="text-center" bgcolor="#FFFF00">
+      <td>KEBENARAN</td>
+      <td>KEMANTAPAN</td>
+    </tr>
+    ${body.join("")}
+  </table>`;
+}
 
 function toNumber(value: string | undefined, defaultValue = 0) {
   const parsed = Number(value);
@@ -311,6 +714,12 @@ export async function GET(request: Request) {
 
         return ok(rows.map((row) => ({ id: row.id_partai, name: row.golongan })));
       }
+      case "get_data_view_tunggal":
+        return htmlResponse(await getDataViewTunggal());
+      case "get_data_view_regu":
+        return htmlResponse(await getDataViewRegu());
+      case "get_data_view_ganda":
+        return htmlResponse(await getDataViewGanda());
       default:
         return badRequest(`Action ${action} belum dimigrasikan`);
     }

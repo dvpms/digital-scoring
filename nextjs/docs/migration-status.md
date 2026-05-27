@@ -35,7 +35,6 @@ Sudah dimigrasikan:
 
 Belum dimigrasikan penuh:
 
-- endpoint HTML monitor TGR (`get_data_view_tunggal|get_data_view_regu|get_data_view_ganda`)
 - endpoint admin lain di `backend/*`
 
 ## 4) Migrasi UI (Selesai Tahap Awal)

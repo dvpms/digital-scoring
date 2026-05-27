@@ -18,6 +18,7 @@ Tahap awal sudah aktif di folder ini (`/nextjs`):
   - `POST /api/nilai?action=submit_skor|delete_nilai`
 - API route TGR inti (juritgr):
   - `GET /api/juritgr?a=partai|juri|login|get_golongan_tgr`
+  - `GET /api/juritgr?a=get_data_view_tunggal|get_data_view_regu|get_data_view_ganda`
   - `POST /api/juritgr?action=<aksi-skor-inti>`
 - Halaman Next.js awal:
   - `/`
@@ -49,5 +50,5 @@ npm run dev
 ## Catatan Migrasi
 
 - Repo root masih berisi aplikasi PHP legacy untuk mode transisi (dual-run).
-- Fokus tahap berikutnya: API TGR, autentikasi sesi terpusat, form pendaftaran penuh, dan dashboard admin.
+- Fokus tahap berikutnya: autentikasi sesi terpusat, form pendaftaran penuh, dan dashboard admin.
 - Dokumen status rinci ada di `docs/migration-status.md`.
