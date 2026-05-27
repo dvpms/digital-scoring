@@ -1,7 +1,7 @@
 FROM php:7.4-apache
 
-RUN a2dismod mpm_event mpm_worker || true
-RUN a2enmod mpm_prefork rewrite
+RUN a2dismod mpm_event mpm_worker || true \
+    && a2enmod mpm_prefork rewrite
 
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
