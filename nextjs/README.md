@@ -16,6 +16,9 @@ Tahap awal sudah aktif di folder ini (`/nextjs`):
 - API route tanding inti:
   - `GET /api/nilai?a=partai|juri|login|jadwal|history`
   - `POST /api/nilai?action=submit_skor|delete_nilai`
+- API route TGR inti (juritgr):
+  - `GET /api/juritgr?a=partai|juri|login|get_golongan_tgr`
+  - `POST /api/juritgr?action=<aksi-skor-inti>`
 - Halaman Next.js awal:
   - `/`
   - `/pencarian`
@@ -25,6 +28,7 @@ Tahap awal sudah aktif di folder ini (`/nextjs`):
   - `/pencarian.php -> /pencarian`
   - `/konfirmasi.php -> /konfirmasi`
   - `/nilai/api.php -> /api/nilai`
+  - `/juritgr/api.php -> /api/juritgr`
 
 ## Menjalankan Lokal
 

@@ -25,6 +25,8 @@
 Sudah dimigrasikan:
 
 - `nilai/api.php` (aksi prioritas): `partai`, `juri`, `login`, `jadwal`, `history`, `submit_skor`, `delete_nilai`
+- `juritgr/api.php` (aksi inti): `partai`, `juri`, `login`, `get_golongan_tgr`,
+  `insert_first_*`, reset hukuman/diskualifikasi, update nilai jurus/kemantapan, dan hukuman utama TGR.
 - Endpoint publik:
   - ringkasan peserta
   - daftar kontingen
@@ -33,7 +35,7 @@ Sudah dimigrasikan:
 
 Belum dimigrasikan penuh:
 
-- seluruh aksi kompleks `juritgr/api.php`
+- endpoint HTML monitor TGR (`get_data_view_tunggal|get_data_view_regu|get_data_view_ganda`)
 - endpoint admin lain di `backend/*`
 
 ## 4) Migrasi UI (Selesai Tahap Awal)
@@ -58,7 +60,7 @@ Belum dimigrasikan:
 ## 6) Paritas & Dual-Run
 
 - Strategi aktif: Next.js berjalan paralel dengan PHP legacy.
-- URL penting mulai diberi redirect/rewrite untuk kompatibilitas bertahap.
+- URL penting mulai diberi redirect/rewrite untuk kompatibilitas bertahap, termasuk `/juritgr/api.php`.
 
 ## 7) Cutover
 

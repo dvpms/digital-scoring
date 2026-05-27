@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       { source: "/nilai/api.php", destination: "/api/nilai" },
+      { source: "/juritgr/api.php", destination: "/api/juritgr" },
     ];
   },
 };
