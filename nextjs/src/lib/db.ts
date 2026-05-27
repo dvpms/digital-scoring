@@ -10,7 +10,6 @@ function getConfig(): PoolOptions {
     password: process.env.DB_PASSWORD ?? "",
     database: process.env.DB_NAME ?? "skordigital",
     connectionLimit: 10,
-    namedPlaceholders: true,
   };
 }
 
@@ -22,7 +21,7 @@ export function getPool(): Pool {
   return pool;
 }
 
-export async function query<T>(sql: string, params: Record<string, unknown> = {}) {
-  const [rows] = await getPool().execute(sql, params);
+export async function query<T>(sql: string, params: unknown[] = []) {
+  const [rows] = await getPool().query(sql, params);
   return rows as T[];
 }

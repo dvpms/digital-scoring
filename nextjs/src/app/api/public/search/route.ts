@@ -32,14 +32,11 @@ export async function GET(request: Request) {
         `SELECT peserta.*, kelastanding.nm_kelastanding
          FROM peserta
          INNER JOIN kelastanding ON peserta.kelas_tanding_FK = kelastanding.ID_kelastanding
-         WHERE peserta.nm_lengkap LIKE :nama
-           AND peserta.kontingen LIKE :kontingen
+         WHERE peserta.nm_lengkap LIKE ?
+           AND peserta.kontingen LIKE ?
            AND peserta.kategori_tanding = 'Tanding'
          ORDER BY peserta.kontingen ASC`,
-        {
-          nama: `%${nama}%`,
-          kontingen: `%${kontingen}%`,
-        },
+        [`%${nama}%`, `%${kontingen}%`],
       );
 
       return ok(rows);
@@ -48,14 +45,11 @@ export async function GET(request: Request) {
     const rows = await query<SearchRow>(
       `SELECT *
        FROM peserta
-       WHERE nm_lengkap LIKE :nama
-         AND kontingen LIKE :kontingen
+       WHERE nm_lengkap LIKE ?
+         AND kontingen LIKE ?
          AND kategori_tanding <> 'Tanding'
        ORDER BY kontingen ASC, kode_gr ASC`,
-      {
-        nama: `%${nama}%`,
-        kontingen: `%${kontingen}%`,
-      },
+      [`%${nama}%`, `%${kontingen}%`],
     );
 
     return ok(rows);

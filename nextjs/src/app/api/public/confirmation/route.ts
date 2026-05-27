@@ -60,8 +60,7 @@ export async function POST(request: Request) {
         .update(`${payload.norekening}${safeOriginalName}`)
         .digest("hex") + safeOriginalName;
 
-    const relativeUploadDir = process.env.UPLOAD_DIR ?? "uploads/buktibayar";
-    const absoluteUploadDir = path.join(process.cwd(), relativeUploadDir);
+    const absoluteUploadDir = path.join(process.cwd(), "uploads", "buktibayar");
 
     await fs.mkdir(absoluteUploadDir, { recursive: true });
 

@@ -34,7 +34,10 @@ async function parsePayload(request: Request) {
     return (await request.json()) as Record<string, string>;
   }
 
-  if (contentType.includes("multipart/form-data") || contentType.includes("application/x-www-form-urlencoded")) {
+  if (
+    contentType.includes("multipart/form-data") ||
+    contentType.includes("application/x-www-form-urlencoded")
+  ) {
     const formData = await request.formData();
     return Object.fromEntries(formData.entries()) as Record<string, string>;
   }
@@ -57,7 +60,14 @@ export async function GET(request: Request) {
           "SELECT id_partai, partai, kelas, gelanggang FROM jadwal_tanding WHERE status='-' ORDER BY CAST(partai AS UNSIGNED) ASC",
         );
 
-        return ok(rows.map((row) => ({ id: row.id_partai, name: row.partai, kelas: row.kelas, gelanggang: row.gelanggang })));
+        return ok(
+          rows.map((row) => ({
+            id: row.id_partai,
+            name: row.partai,
+            kelas: row.kelas,
+            gelanggang: row.gelanggang,
+          })),
+        );
       }
       case "juri": {
         const rows = await query<JuriRow>("SELECT id_juri, nm_juri FROM wasit_juri");
@@ -73,8 +83,8 @@ export async function GET(request: Request) {
 
         const hashed = createHash("md5").update(rawPassword).digest("hex");
         const [row] = await query<{ id_juri: number }>(
-          "SELECT id_juri FROM wasit_juri WHERE id_juri = :id AND pass_juri = :pass LIMIT 1",
-          { id, pass: hashed },
+          "SELECT id_juri FROM wasit_juri WHERE id_juri = ? AND pass_juri = ? LIMIT 1",
+          [id, hashed],
         );
 
         return ok({ status: row ? "success" : "error" });
@@ -86,8 +96,8 @@ export async function GET(request: Request) {
         }
 
         const [row] = await query<JadwalRow>(
-          "SELECT * FROM jadwal_tanding WHERE id_partai = :id LIMIT 1",
-          { id: idPartai },
+          "SELECT * FROM jadwal_tanding WHERE id_partai = ? LIMIT 1",
+          [idPartai],
         );
 
         return ok(row ?? {});
@@ -106,12 +116,12 @@ export async function GET(request: Request) {
           `SELECT nilai_tanding.*, w.nm_juri
            FROM nilai_tanding
            INNER JOIN wasit_juri w ON w.id_juri = nilai_tanding.id_juri
-           WHERE nilai_tanding.id_jadwal = :idJadwal
-             AND nilai_tanding.id_juri = :idJuri
-             AND nilai_tanding.sudut = :sudut
-             AND nilai_tanding.babak = :babak
+           WHERE nilai_tanding.id_jadwal = ?
+             AND nilai_tanding.id_juri = ?
+             AND nilai_tanding.sudut = ?
+             AND nilai_tanding.babak = ?
            ORDER BY id_nilai DESC`,
-          { idJadwal, idJuri, sudut, babak },
+          [idJadwal, idJuri, sudut, babak],
         );
 
         return ok(rows);
@@ -156,7 +166,9 @@ export async function POST(request: Request) {
           return badRequest("id_nilai wajib diisi");
         }
 
-        await getPool().execute("DELETE FROM nilai_tanding WHERE id_nilai = ?", [Number(idNilai)]);
+        await getPool().execute("DELETE FROM nilai_tanding WHERE id_nilai = ?", [
+          Number(idNilai),
+        ]);
         return ok({ status: "success" });
       }
       default:
