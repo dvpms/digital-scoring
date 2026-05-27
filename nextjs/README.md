@@ -20,6 +20,9 @@ Tahap awal sudah aktif di folder ini (`/nextjs`):
   - `GET /api/juritgr?a=partai|juri|login|get_golongan_tgr`
   - `GET /api/juritgr?a=get_data_view_tunggal|get_data_view_regu|get_data_view_ganda`
   - `POST /api/juritgr?action=<aksi-skor-inti>`
+- API route backend admin proses:
+  - `POST /api/backend?legacy=verifylogin.php|update_password.php|...`
+  - `GET /api/backend?legacy=logout.php|admin_do_del_peserta.php|...`
 - Halaman Next.js awal:
   - `/`
   - `/pencarian`
@@ -30,6 +33,7 @@ Tahap awal sudah aktif di folder ini (`/nextjs`):
   - `/konfirmasi.php -> /konfirmasi`
   - `/nilai/api.php -> /api/nilai`
   - `/juritgr/api.php -> /api/juritgr`
+  - endpoint proses di `/backend/*.php` utama sudah di-rewrite ke `/api/backend`
 
 ## Menjalankan Lokal
 

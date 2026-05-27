@@ -32,10 +32,15 @@ Sudah dimigrasikan:
   - daftar kontingen
   - pencarian peserta tanding/TGR
   - konfirmasi pembayaran + upload bukti
+- Endpoint proses backend admin utama di `backend/*`:
+  - autentikasi proses (`verifylogin`, `logout`, `update_password`)
+  - CRUD peserta, jadwal tanding/TGR, medali
+  - proses undian tanding/TGR dan clear/reset data
+  - approve konfirmasi pembayaran
 
 Belum dimigrasikan penuh:
 
-- endpoint admin lain di `backend/*`
+- halaman dashboard/admin HTML lengkap di `backend/*`
 
 ## 4) Migrasi UI (Selesai Tahap Awal)
 
