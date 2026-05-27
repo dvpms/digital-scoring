@@ -36,6 +36,10 @@ COPY . /var/www/html/
 
 RUN chown -R www-data:www-data /var/www/html
 
+# Copy and make the startup/diagnostic entrypoint executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
 
-CMD ["apache2ctl", "-D", "FOREGROUND"]
+ENTRYPOINT ["/entrypoint.sh"]
